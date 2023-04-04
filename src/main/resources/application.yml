@@ -1,0 +1,59 @@
+
+spring:
+  devtools:
+    restart:
+      enabled: true  #设置开启热部署
+      additional-paths: src/main/java #重启目录
+      exclude: WEB-INF/**
+  application:
+    name: web-example
+  datasource:
+    username: root
+    password: vxiPSdZfapc=
+    #?serverTimezone=UTC???????
+    url: jdbc:p6spy:mysql://localhost:3306/test?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+    #Spring Boot ???????????????????
+    #druid ???????
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+
+    #?????????filters?stat:?????log4j??????wall???sql??
+    #???????  java.lang.ClassNotFoundException: org.apache.log4j.Priority
+    #??? log4j ?????Maven ???https://mvnrepository.com/artifact/log4j/log4j
+    filters: stat,wall,log4j
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+mybatis-plus:
+  configuration:
+    #开启懒加载
+#    lazy-loading-enabled: true
+    #false 为按需加载
+    aggressive-lazy-loading: false
+    localCacheScope: session
+    cache-enabled: false
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
+#  server:
+#    port: 9091
+#  metrics:
+#    tags:
+#      application: ${spring.application.name}

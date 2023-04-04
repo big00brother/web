@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.web.mapper.EmployeeMapper">
+
+    <resultMap id="associationResultMap" type="com.example.web.entity.Employee">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <association property="salary" column="salary_id" javaType="com.example.web.entity.Salary" resultMap="salaryResultMap"/>
+    </resultMap>
+
+    <resultMap id="salaryResultMap" type="com.example.web.entity.Salary">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="salary" jdbcType="FLOAT" property="salary" />
+    </resultMap>
+
+
+    <resultMap id="employeeResultMap" type="com.example.web.entity.Employee">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <association property="salary" column="salary_id" javaType="com.example.web.entity.Salary"
+                     select="findSalary" fetchType="lazy"/>
+    </resultMap>
+
+    <select id="selectEmployee" resultMap="associationResultMap">
+        select * from employee e, salary s where e.salary_id = s.id
+    </select>
+
+    <select id="selectEmployeeList" resultMap="employeeResultMap">
+        select * from employee
+    </select>
+
+    <select id="findSalary" resultMap="salaryResultMap">
+        select * from salary where id = #{id, jdbcType=INTEGER}
+    </select>
+
+</mapper>
